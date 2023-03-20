@@ -1,13 +1,15 @@
 from .base import BaseView
 from services.user import UserService
-from pprint import pprint
 from flask import request
 from helpers import get_body
+from decorators.authentication import is_authenticated
+from decorators.authorization import is_authorized
+from pprint import pprint
 import traceback
 
 class UserView(BaseView):
     
-    # decorators = [login_required]
+    decorators = [ is_authenticated, is_authorized ]
 
     def index(self):
         json = {'error': False}

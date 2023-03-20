@@ -64,7 +64,7 @@ def passwordGenerator(password: str = '') -> str:
     return bcrypt.hashpw(str(password).encode("utf-8"), bcrypt.gensalt(rounds))
 
 def passwordCompare(password: str, encrypt: str) -> bool:
-    return bcrypt.checkpw(password, encrypt)
+    return bcrypt.checkpw(password.encode('utf8'), encrypt.encode('utf8'))
 
 def shuffle(word: str = '') -> str:
     return "".join(random.sample(word, len(word)))

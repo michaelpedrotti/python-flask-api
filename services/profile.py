@@ -24,6 +24,7 @@ class ProfileService(BaseService):
         
         db.session.add(row)
         db.session.commit()
+        db.session.refresh(row)
         
         return row.serialize
 
