@@ -9,7 +9,7 @@ import traceback
 
 class UserView(BaseView):
     
-    decorators = [ is_authenticated, is_authorized ]
+    decorators = [ is_authorized, is_authenticated ]
 
     def index(self):
         json = {'error': False}
