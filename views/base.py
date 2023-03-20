@@ -7,25 +7,25 @@ class BaseView(MethodView):
     init_every_request = False
 
     def index(self):
-        return {"error": False, "message": "index"}
+        return {"error": False, "message": "index was not implemented"}
 
     def create(self):
-        return {"error": False, "message": "create"}
+        return {"error": False, "message": "create was not implemented"}
 
     def store(self):
-        return {"error": False, "message": "store"}
+        return {"error": False, "message": "store was not implemented"}
 
     def show(self, id):
-        return {"error": False, "message": "show"}
+        return {"error": False, "message": "show was not implemented"}
 
     def edit(self, id):
-        return {"error": False, "message": "edit"}
+        return {"error": False, "message": "edit was not implemented"}
 
     def update(self, id):
-        return {"error": False, "message": "update"}
+        return {"error": False, "message": "update was not implemented"}
 
     def detroy(self, id):
-        return {"error": False, "message": "detroy"}
+        return {"error": False, "message": "detroy was not implemented"}
 
 
     def get(self, id = None):

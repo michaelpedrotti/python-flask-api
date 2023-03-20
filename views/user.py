@@ -2,4 +2,6 @@ from .base import BaseView
 
 
 class UserView(BaseView):
-    pass
+
+    def index(self):
+        return {"error": False, "message": "index override"}

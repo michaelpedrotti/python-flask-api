@@ -1,18 +1,27 @@
 from flask import Flask
-from views.user import UserView
-from views.profile import ProfileView
-import views.public as public
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from helpers import resource
 
-app = Flask(__name__)
-app.config.from_pyfile('settings.py')
+db = SQLAlchemy()
+ma = Marshmallow()
 
-# https://flask.palletsprojects.com/en/2.2.x/views/
-resource(app, 'user', UserView.as_view('user'))
-resource(app, 'profile', ProfileView.as_view('profile'))
+def create_app():
 
-app.add_url_rule('/', view_func=public.index)
+    from views.user import UserView
+    from views.profile import ProfileView
+    import views.public as public
 
+    app = Flask(__name__)
+    app.config.from_pyfile('settings.py')
+ 
+    db.init_app(app)
+    ma.init_app(app)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    # https://flask.palletsprojects.com/en/2.2.x/views/
+    resource(app, 'user', UserView.as_view('user'))
+    resource(app, 'profile', ProfileView.as_view('profile'))
+
+    app.add_url_rule('/', view_func=public.index)
+
+    return app

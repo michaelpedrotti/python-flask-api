@@ -8,7 +8,6 @@ TESTING = False
 # JSON_SORT_KEYS = True
 # JSONIFY_MIMETYPE = 'application/json'
 
-DATABASE_URI = 'mysql://user@localhost/foo'
-DB_SERVER = '192.168.1.56'
-
+# dialect://username:password@host:port/database
+SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost/app'
 SQLALCHEMY_ECHO = False
