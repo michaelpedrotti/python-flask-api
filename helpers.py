@@ -1,3 +1,9 @@
+import bcrypt
+import os
+import random
+from datetime import datetime
+from pprint import pprint
+
 def resource(app, path, func):
     app.add_url_rule(f"/{path}/<int:id>", strict_slashes=False, view_func=func, methods=["GET", "PUT", "DELETE"])
     app.add_url_rule(f"/{path}/<int:id>/edit", strict_slashes=False, view_func=func, methods=["GET"])
@@ -10,7 +16,6 @@ def get_body(request):
         or
         request.form.to_dict()
     )
-
 
 def request_square_brackets(form):
     """
@@ -49,3 +54,17 @@ def request_square_brackets(form):
                     sub_data[k] = v
 
     return data
+
+def passwordGenerator(password: str = '') -> str:  
+
+    if "".__eq__(password):
+        password = datetime.now().strftime('%Y%m%d')
+    
+    rounds = int(os.environ.get('SALT', 10))
+    return bcrypt.hashpw(str(password).encode("utf-8"), bcrypt.gensalt(rounds))
+
+def passwordCompare(password: str, encrypt: str) -> bool:
+    return bcrypt.checkpw(password, encrypt)
+
+def shuffle(word: str = '') -> str:
+    return "".join(random.sample(word, len(word)))
