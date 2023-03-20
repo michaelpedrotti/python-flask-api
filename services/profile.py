@@ -61,17 +61,15 @@ class ProfileService(BaseService):
         
         query: Query = Profile.query
 
-        # todo: add filter
+        query = self.filter(filter.to_dict(), Profile, query)
 
-        total = query.count()
+        total = query.count()       
 
         offset = int(filter.get('offset', 0))
         limit = int(filter.get('limit', 5))
 
         query = query.offset(offset).limit(limit)
 
-        pprint(Profile.tags)
-        
         return {
             "total": total,
             "rows": [ row.serialize for row in query.all() ]

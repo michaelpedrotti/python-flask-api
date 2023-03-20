@@ -16,6 +16,7 @@ class ProfileView(BaseView):
         try:
             json.update(ProfileService().paginate(request.args))
         except Exception as e:
+            print(traceback.format_exc())
             json["message"] = str(e)
             json["error"] = True
         return json

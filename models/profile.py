@@ -14,9 +14,13 @@ class Profile(db.Model):
     # createAt = Column(DateTime, nullable=False)
     # updateAt = Column(DateTime, nullable=False)
 
+    def __repr__(self):
+        return '<Profile %r>' % self.id
+
     @property
     def serialize(self):
        return {
            'id': self.id,
            'name': self.name,
        }
+       
