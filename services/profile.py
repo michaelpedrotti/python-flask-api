@@ -1,6 +1,5 @@
-from sqlalchemy import sql
-from flask_sqlalchemy.pagination import QueryPagination
 from flask_sqlalchemy.query import Query
+from werkzeug.wrappers.request import ImmutableMultiDict
 from .base import BaseService
 from models.profile import Profile
 from app import db
@@ -54,33 +53,26 @@ class ProfileService(BaseService):
 
         return row.serialize
 
-    def paginate(self, filter = {}):
-        """ url: https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/pagination/ """
+    def paginate(self, filter: ImmutableMultiDict):
+        """ 
+        url: https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/pagination/ 
+        url: https://stackoverflow.com/questions/20642497/sqlalchemy-query-to-return-only-n-results
+        """
         
-        # query: sql.Select = db.select(Profile) \
-        #     .order_by(Profile.id) \
-        #     .limit(5) \
-        #     .offset(0)
-
-        # paginator: Pagination = db.paginate(query)
-
         query: Query = Profile.query
 
-        paginator: QueryPagination = query.paginate(per_page=5, page=2)
+        # todo: add filter
 
-        pprint(Profile.query)
-        # pprint(queryP.total)
-        # pprint(queryP.items)
-        # flask_sqlalchemy.pagination.QueryPagination
+        total = query.count()
 
-        # [ pprint(row) for row in paginator ]
-        # 
+        offset = int(filter.get('offset', 0))
+        limit = int(filter.get('limit', 5))
+
+        query = query.offset(offset).limit(limit)
+
+        pprint(Profile.tags)
+        
         return {
-            "meta": {
-                "first": paginator.first,
-                "last": paginator.last
-
-            },
-            "total": paginator.total,
-            "rows": [ row.serialize for row in paginator.items ]
+            "total": total,
+            "rows": [ row.serialize for row in query.all() ]
         }
