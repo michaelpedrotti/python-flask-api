@@ -66,7 +66,7 @@ class ProfileService(BaseService):
         total = query.count()       
 
         offset = int(filter.get('offset', 0))
-        limit = int(filter.get('limit', 5))
+        limit = int(filter.get('limit', 10))
 
         query = query.offset(offset).limit(limit)
 
