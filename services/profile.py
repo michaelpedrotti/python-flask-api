@@ -3,13 +3,13 @@ from werkzeug.wrappers.request import ImmutableMultiDict
 from .base import BaseService
 from models.profile import Profile
 from app import db
-from pprint import pprint
+# from pprint import pprint
 
 
 class ProfileService(BaseService):
     """ url https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/ """
     
-    def find(self, id = 0):
+    def find(self, id = 0) -> dict:
 
         row = Profile.query.get(id)
 
@@ -18,7 +18,7 @@ class ProfileService(BaseService):
 
         return row.serialize
 
-    def create(self, data = {}):
+    def create(self, data = {}) -> dict:
         """ url: https://docs.python.org/3/tutorial/controlflow.html#unpacking-argument-lists """
         row = Profile(**data)
         
@@ -28,7 +28,7 @@ class ProfileService(BaseService):
         
         return row.serialize
 
-    def update(self, id = 0, data = {}):
+    def update(self, id = 0, data = {}) -> dict:
 
         row = Profile.query.get(id)
           
@@ -42,7 +42,7 @@ class ProfileService(BaseService):
 
         return row.serialize
 
-    def delete(self, id = 0):
+    def delete(self, id = 0) -> dict:
 
         row = Profile.query.get(id)
           
@@ -54,7 +54,7 @@ class ProfileService(BaseService):
 
         return row.serialize
 
-    def paginate(self, filter: ImmutableMultiDict):
+    def paginate(self, filter: ImmutableMultiDict) -> dict:
         """ 
         url: https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/pagination/ 
         url: https://stackoverflow.com/questions/20642497/sqlalchemy-query-to-return-only-n-results

@@ -32,3 +32,6 @@ class Authentication():
             os.environ.get('JWT_SECRET', 'secret'), 
             algorithms=["HS256"]
         )
+    
+    def expires(self, token: str = ''):
+        pass

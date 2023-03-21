@@ -1,28 +1,33 @@
 from flask_sqlalchemy.query import Query
 from werkzeug.wrappers.request import ImmutableMultiDict
 from .base import BaseService
+from . profile import ProfileService
 from models.user import UserModel
 from app import db
 from helpers import passwordGenerator
-from pprint import pprint
+# from pprint import pprint
 
 
 class UserService(BaseService):
     
-    def find(self, id = 0):
+    def find(self, id = 0, includes = False) -> dict:
 
-        row = UserModel.query.get(id)
+        model = UserModel.query.get(id)
 
-        if not row:
+        if not model:
             raise Exception('User was not found')
 
-        return row.serialize
+        row: dict =  model.serialize
+    
+        if includes is not False:
+            row["profile"] = ProfileService().find(model.profile_id)
 
-    def create(self, data = {}):
+        return row
+
+
+    def create(self, data = {}) -> dict:
 
         data['password'] = passwordGenerator()
-
-        pprint(data)
 
         row = UserModel(**data)
         
@@ -32,7 +37,7 @@ class UserService(BaseService):
         
         return row.serialize
 
-    def update(self, id = 0, data = {}):
+    def update(self, id = 0, data = {}) -> dict:
 
         row = UserModel.query.get(id)
           
@@ -46,7 +51,7 @@ class UserService(BaseService):
 
         return row.serialize
 
-    def delete(self, id = 0):
+    def delete(self, id = 0) -> dict:
 
         row = UserModel.query.get(id)
           
@@ -58,9 +63,10 @@ class UserService(BaseService):
 
         return row.serialize
 
-    def paginate(self, filter: ImmutableMultiDict):
+    def paginate(self, filter: ImmutableMultiDict) -> dict:
 
         query: Query = UserModel.query
+        
 
         query = self.filter(filter.to_dict(), UserModel, query)
 

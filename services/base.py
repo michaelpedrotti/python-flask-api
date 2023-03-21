@@ -1,8 +1,9 @@
 from helpers import request_square_brackets
 from flask_sqlalchemy.model import Model
+from werkzeug.wrappers.request import ImmutableMultiDict
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.sql.elements import ColumnElement
-from pprint import pprint
+# from pprint import pprint
 import re
 
 
@@ -46,17 +47,17 @@ class BaseService():
 
         return query.filter(*filter)   
     
-    def find():
+    def find(self, id=0) -> dict:
         return {}
 
-    def create():
+    def create(self, data = {}) -> dict:
         return {}
 
-    def update():
+    def update(self, id=0, data = {}) -> dict:
         return {}
 
-    def delete():
+    def delete(self, id=0) -> dict:
         return {}
 
-    def paginate():
+    def paginate(self, filter: ImmutableMultiDict) -> dict:
         return {"total": 0, "rows": []}

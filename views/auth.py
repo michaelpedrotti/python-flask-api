@@ -18,7 +18,8 @@ def login(email = '', password = ''):
         token = service.generate(user["id"])
 
         json["data"] = {
-            "token": token
+            "token": token,
+            "expires": 'time'
         }
 
     except Exception as e:

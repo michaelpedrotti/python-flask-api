@@ -37,7 +37,7 @@ class UserView(BaseView):
     def show(self, id = 0):
         json = {'error': False}
         try:
-            json["data"] = UserService().find(id)
+            json["data"] = UserService().find(id, True)
         except Exception as e:
             json["message"] = str(e)
             json["error"] = True
@@ -46,7 +46,7 @@ class UserView(BaseView):
     def edit(self, id = 0):
         json = {'error': False, "form": {}}
         try:
-            json["data"] = UserService().find(id)
+            json["data"] = UserService().find(id, True)
         except Exception as e:
             json["message"] = str(e)
             json["error"] = True
