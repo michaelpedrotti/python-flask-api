@@ -1,6 +1,9 @@
+from decorators.authentication import is_authenticated
 from services.authentication import Authentication
-from flask import request
-# import traceback
+from services.user import UserService
+from flask import g, request
+from pprint import pprint
+import traceback
 
 
 def login(email = '', password = ''):
@@ -29,8 +32,34 @@ def login(email = '', password = ''):
     
     return json
 
+@is_authenticated
 def verify():
     pass
 
-def me():
-    pass
+@is_authenticated
+def my_self():
+    
+    json = {'error': False}
+
+    try:
+        user = g.get('user')
+       
+        if(user is None):
+            raise Exception('User not found')
+
+        user: dict = UserService().find(user.get('id'), True)
+
+        user.pop('id')
+        user.pop('profile_id')
+
+        del user["profile"]["id"]
+
+
+        json["data"] = user
+
+    except Exception as e:
+        print(traceback.format_exc())
+        json["message"] = str(e)
+        json["error"] = True
+    
+    return json

@@ -21,7 +21,7 @@ class UserService(BaseService):
         row: dict =  model.serialize
     
         if includes is not False:
-            row["profile"] = ProfileService().find(model.profile_id)
+            row["profile"] = ProfileService().find(model.profile_id, True)
 
         return row
 

@@ -1,5 +1,6 @@
 from flask_sqlalchemy.query import Query
 from sqlalchemy.sql.elements import ColumnElement
+from sqlalchemy.orm import Query
 from werkzeug.wrappers.request import ImmutableMultiDict
 from models.permssion import PermissionModel
 from .base import BaseService
@@ -21,7 +22,7 @@ class PermissionService(BaseService):
     def all(self, filter: dict = {}, columns: tuple = []) -> tuple:
         
         model = PermissionModel
-        query = PermissionModel.query
+        query: Query = PermissionModel.query
         kargs = []
 
         for name, value in filter.items():
@@ -53,12 +54,10 @@ class PermissionService(BaseService):
 
         query = query.filter(*kargs)
 
-        if len(columns) > 0:
-            columns = [self.find_model_column(model, column) for column in columns if column is not None ]
-
-        query.with_entities(PermissionModel.resource)
-
-        pprint(columns)
+        # if len(columns) > 0:
+        #     columns = [self.find_model_column(model, column) for column in columns if column is not None ]
+        # query = query.with_entities(PermissionModel.resource)
+        # lost serialize property
 
         return query.all()
 

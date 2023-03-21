@@ -20,11 +20,8 @@ class ProfileService(BaseService):
         row: dict = model.serialize
 
         if includes is not False:
-            row["permissions"] = [                 
-                row.serialize for row in PermissionService().all({
-                    "profile_id": model.id
-                }, ['resource', 'actions'])
-            ]
+            rows = PermissionService().all({"profile_id": model.id}, ['resource', 'actions'])
+            row["permissions"] = [ row.serialize for row in rows ]
 
         return row
 
