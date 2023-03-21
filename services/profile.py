@@ -1,44 +1,107 @@
 from flask_sqlalchemy.query import Query
 from werkzeug.wrappers.request import ImmutableMultiDict
 from .base import BaseService
+from .permission import PermissionService
 from models.profile import Profile
 from app import db
-# from pprint import pprint
+from pprint import pprint
 
 
 class ProfileService(BaseService):
     """ url https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/ """
     
-    def find(self, id = 0) -> dict:
+    def find(self, id = 0, includes = False) -> dict:
 
-        row = Profile.query.get(id)
+        model = Profile.query.get(id)
 
-        if not row:
+        if not model:
             raise Exception('Profile was not found')
 
-        return row.serialize
+        row: dict = model.serialize
 
-    def create(self, data = {}) -> dict:
+        if includes is not False:
+            row["permissions"] = [                 
+                row.serialize for row in PermissionService.all(filter = {
+                    "profile_id": model.id
+                })
+            ]
+
+        return row
+
+    def create(self, data: dict = {}) -> dict:
         """ url: https://docs.python.org/3/tutorial/controlflow.html#unpacking-argument-lists """
-        row = Profile(**data)
+
+        row = Profile(name=data.get('name'))
         
         db.session.add(row)
         db.session.commit()
         db.session.refresh(row)
+
+        if data.get('permissions') is not None:
+            
+            service = PermissionService()
+            
+            for resource, actions in data.get('permissions').items():
+
+                service.create({
+                    'resource': resource,
+                    'actions': actions,
+                    'profile_id': row.id,
+                })
         
         return row.serialize
 
-    def update(self, id = 0, data = {}) -> dict:
+    def update(self, id = 0, data: dict = {}) -> dict:
 
         row = Profile.query.get(id)
           
         if not row:
             raise Exception('Profile was not found')
     
-        row.name = data["name"]
+        row.name = data.get("name")
 
         db.session.merge(row)
         db.session.commit()
+
+        if data.get('permissions') is not None:
+            
+            service = PermissionService()
+
+            deleted: tuple = service.all(filter = {
+                "profile_id": row.id,
+                "resource": {
+                    "not_in": data.get('permissions').keys()
+                }
+            })
+
+            if len(deleted) > 0:
+                for row in deleted:
+                    # .delete({id: row.id, profile: model.id});
+                    service.delete(id)
+
+            saved = { row["resource"]: row["id"] for row in service.all(filter = {
+                "profile_id": row.id,
+                "resource": {
+                    "in": data.get('permissions').keys()
+                }
+            })}
+
+            for resource, actions in data.get('permissions').items():
+                
+                if(resource in saved):
+                    id = saved.get(resource)
+                    
+                    service.update({
+                        'resource': resource,
+                        'actions': actions,
+                        'profile_id': row.id,
+                    }, id)
+                else:
+                    service.create({
+                        'resource': resource,
+                        'actions': actions,
+                        'profile_id': row.id,
+                    })        
 
         return row.serialize
 

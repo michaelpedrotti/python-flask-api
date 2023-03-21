@@ -5,6 +5,7 @@ from . profile import ProfileService
 from models.user import UserModel
 from app import db
 from helpers import passwordGenerator
+from datetime import datetime
 # from pprint import pprint
 
 
@@ -45,6 +46,7 @@ class UserService(BaseService):
             raise Exception('User was not found')
     
         row.name = data["name"]
+        row.updatedAt = datetime.now()
 
         db.session.merge(row)
         db.session.commit()

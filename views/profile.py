@@ -29,6 +29,7 @@ class ProfileView(BaseView):
         try:
             json["data"] = ProfileService().create(get_body(request))
         except Exception as e:
+            print(traceback.format_exc())
             json["message"] = str(e)
             json["error"] = True
         return json
@@ -36,7 +37,7 @@ class ProfileView(BaseView):
     def show(self, id = 0):
         json = {'error': False}
         try:
-            json["data"] = ProfileService().find(id)
+            json["data"] = ProfileService().find(id, True)
         except Exception as e:
             json["message"] = str(e)
             json["error"] = True
@@ -45,7 +46,7 @@ class ProfileView(BaseView):
     def edit(self, id = 0):
         json = {'error': False, "form": {}}
         try:
-            json["data"] = ProfileService().find(id)
+            json["data"] = ProfileService().find(id, True)
         except Exception as e:
             json["message"] = str(e)
             json["error"] = True
@@ -56,7 +57,7 @@ class ProfileView(BaseView):
         try:
             json["data"] = ProfileService().update(id, get_body(request))
         except Exception as e:
-            # print(traceback.format_exc())
+            print(traceback.format_exc())
             json["message"] = str(e)
             json["error"] = True
         return json
