@@ -1,11 +1,9 @@
 from flask_sqlalchemy.query import Query
-from werkzeug.wrappers.request import ImmutableMultiDict
-from .base import BaseService
-from models.permssion import PermissionModel
-from app import db
-from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.sql.elements import ColumnElement
-from helpers import passwordGenerator
+from werkzeug.wrappers.request import ImmutableMultiDict
+from models.permssion import PermissionModel
+from .base import BaseService
+from app import db
 from pprint import pprint
 
 
@@ -20,16 +18,16 @@ class PermissionService(BaseService):
 
         return model.serialize
     
-    def all(*, filter: dict = {}) -> tuple:
+    def all(self, filter: dict = {}, columns: tuple = []) -> tuple:
         
         model = PermissionModel
         query = PermissionModel.query
         kargs = []
-        
+
         for name, value in filter.items():
             
-            attr = getattr(model, name)
-            if(isinstance(attr, InstrumentedAttribute)):
+            attr = self.find_model_column(model, name)
+            if(attr is not None):
                 
                 column: ColumnElement = None
 
@@ -49,13 +47,18 @@ class PermissionService(BaseService):
                             case _: column = attr.__eq__(val)
 
                 else:
-                    pprint("else: " + name + " = " + str(value))
                     column = attr.__eq__(value)
-
 
                 kargs.append(column) 
 
         query = query.filter(*kargs)
+
+        if len(columns) > 0:
+            columns = [self.find_model_column(model, column) for column in columns if column is not None ]
+
+        query.with_entities(PermissionModel.resource)
+
+        pprint(columns)
 
         return query.all()
 

@@ -21,9 +21,9 @@ class ProfileService(BaseService):
 
         if includes is not False:
             row["permissions"] = [                 
-                row.serialize for row in PermissionService.all(filter = {
+                row.serialize for row in PermissionService().all({
                     "profile_id": model.id
-                })
+                }, ['resource', 'actions'])
             ]
 
         return row
@@ -67,7 +67,7 @@ class ProfileService(BaseService):
             
             service = PermissionService()
 
-            deleted: tuple = service.all(filter = {
+            deleted: tuple = service.all({
                 "profile_id": row.id,
                 "resource": {
                     "not_in": data.get('permissions').keys()
@@ -79,7 +79,7 @@ class ProfileService(BaseService):
                     # .delete({id: row.id, profile: model.id});
                     service.delete(id)
 
-            saved = { row["resource"]: row["id"] for row in service.all(filter = {
+            saved = { row["resource"]: row["id"] for row in service.all({
                 "profile_id": row.id,
                 "resource": {
                     "in": data.get('permissions').keys()

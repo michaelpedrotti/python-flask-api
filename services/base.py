@@ -3,6 +3,7 @@ from flask_sqlalchemy.model import Model
 from werkzeug.wrappers.request import ImmutableMultiDict
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.sql.elements import ColumnElement
+from sqlalchemy.orm import Query
 # from pprint import pprint
 import re
 
@@ -10,7 +11,7 @@ import re
 
 class BaseService():
 
-    def filter(self, dict: dict = {}, model: Model = None, query = None):
+    def filter(self, dict: dict = {}, model: Model = None, query: Query = None):
 
         params = request_square_brackets(dict)
         filter: list = []
@@ -47,6 +48,13 @@ class BaseService():
 
         return query.filter(*filter)   
     
+    def find_model_column(self, model, column_name):
+        attr = getattr(model, column_name) 
+        try:
+            return attr if isinstance(attr, InstrumentedAttribute) else None
+        except Exception:
+            return None       
+
     def find(self, id=0) -> dict:
         return {}
 

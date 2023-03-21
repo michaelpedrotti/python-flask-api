@@ -39,6 +39,7 @@ class ProfileView(BaseView):
         try:
             json["data"] = ProfileService().find(id, True)
         except Exception as e:
+            print(traceback.format_exc())
             json["message"] = str(e)
             json["error"] = True
         return json
