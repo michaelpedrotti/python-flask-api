@@ -10,7 +10,7 @@ def create_app():
 
     from views.user import UserView
     from views.profile import ProfileView
-    from views.auth import login, my_self
+    from views.auth import AuthView
     import views.public as public
 
     app = Flask(__name__)
@@ -23,8 +23,11 @@ def create_app():
     resource(app, 'user', UserView.as_view('user'))
     resource(app, 'profile', ProfileView.as_view('profile'))
 
-    app.add_url_rule('/auth/login', view_func=login, methods=["POST"])
-    app.add_url_rule('/auth/me', view_func=my_self, methods=["GET"])
+    app.add_url_rule('/auth/login', view_func=AuthView.login, methods=["POST"])
+    app.add_url_rule('/auth/me', view_func=AuthView.my_self, methods=["GET"])
+    app.add_url_rule('/auth/setting', view_func=AuthView.set_auth_setting, methods=["POST"])
+    app.add_url_rule('/auth/setting', view_func=AuthView.get_auth_setting, methods=["GET"])
+    
     app.add_url_rule('/', view_func=public.index)
 
     return app

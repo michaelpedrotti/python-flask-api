@@ -55,16 +55,24 @@ def request_square_brackets(form):
 
     return data
 
-def passwordGenerator(password: str = '') -> str:  
+def password_generator(password: str = '') -> str:  
 
     if "".__eq__(password):
         password = datetime.now().strftime('%Y%m%d')
     
     rounds = int(os.environ.get('SALT', 10))
-    return bcrypt.hashpw(str(password).encode("utf-8"), bcrypt.gensalt(rounds))
+    return password, bcrypt.hashpw(str(password).encode("utf-8"), bcrypt.gensalt(rounds))
 
-def passwordCompare(password: str, encrypt: str) -> bool:
+def password_compare(password: str, encrypt: str) -> bool:
     return bcrypt.checkpw(password.encode('utf8'), encrypt.encode('utf8'))
 
 def shuffle(word: str = '') -> str:
     return "".join(random.sample(word, len(word)))
+
+
+def model_fill(model, data: dict = {}) -> None:
+
+    for name, value in data.items():
+        if(hasattr(model, name)):
+            pprint(name)
+            setattr(model, name, value)

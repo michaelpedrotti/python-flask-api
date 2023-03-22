@@ -4,9 +4,9 @@ from .base import BaseService
 from . profile import ProfileService
 from models.user import UserModel
 from app import db
-from helpers import passwordGenerator
+from helpers import password_generator, model_fill
 from datetime import datetime
-# from pprint import pprint
+from pprint import pprint
 
 
 class UserService(BaseService):
@@ -28,7 +28,7 @@ class UserService(BaseService):
 
     def create(self, data = {}) -> dict:
 
-        data['password'] = passwordGenerator()
+        password, data['password'] = password_generator()
 
         row = UserModel(**data)
         
@@ -44,8 +44,9 @@ class UserService(BaseService):
           
         if not row:
             raise Exception('User was not found')
-    
-        row.name = data["name"]
+
+        model_fill(row, data)
+
         row.updatedAt = datetime.now()
 
         db.session.merge(row)

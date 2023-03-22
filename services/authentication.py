@@ -1,7 +1,7 @@
 import jwt
 import os
 from models.user import UserModel
-from helpers import passwordCompare
+from helpers import password_compare
 
 
 class Authentication():
@@ -12,7 +12,7 @@ class Authentication():
         if model is None:
             raise Exception('E-mail was not found')
         
-        if passwordCompare(password, model.password) == False:
+        if password_compare(password, model.password) == False:
              raise Exception('E-mail or Password were wrong')
         
         return model.serialize
