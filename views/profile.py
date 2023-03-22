@@ -3,6 +3,7 @@ from services.profile import ProfileService
 from pprint import pprint
 from flask import request
 from helpers.request import get_body
+from validators.profile import ProfileValidator
 import traceback
 
 class ProfileView(BaseView):
@@ -27,9 +28,14 @@ class ProfileView(BaseView):
     def store(self):
         json = {'error': False}
         try:
-            json["data"] = ProfileService().create(get_body(request))
+            form = ProfileValidator()
+            if not form.validate():
+                json["errors"] = form.errors
+                raise Exception("Check fields")
+            
+            json["data"] = ProfileService().create(form.data)
+
         except Exception as e:
-            print(traceback.format_exc())
             json["message"] = str(e)
             json["error"] = True
         return json
@@ -56,6 +62,11 @@ class ProfileView(BaseView):
     def update(self, id = 0):
         json = {'error': False}
         try:
+            form = ProfileValidator()
+            if not form.validate():
+                json["errors"] = form.errors
+                raise Exception("Check fields")
+            
             json["data"] = ProfileService().update(id, get_body(request))
         except Exception as e:
             print(traceback.format_exc())

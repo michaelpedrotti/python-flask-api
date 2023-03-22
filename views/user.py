@@ -1,5 +1,6 @@
 from .base import BaseView
 from services.user import UserService
+from validators.user import UserValidator
 from flask import request
 from helpers.request import get_body
 from decorators.authentication import is_authenticated
@@ -27,6 +28,11 @@ class UserView(BaseView):
     def store(self):
         json = {'error': False}
         try:
+            form = UserValidator()
+            if not form.validate():
+                json["errors"] = form.errors
+                raise Exception("Check fields")
+        
             json["data"] = UserService().create(get_body(request))
         except Exception as e:
             print(traceback.format_exc())
@@ -55,6 +61,11 @@ class UserView(BaseView):
     def update(self, id = 0):
         json = {'error': False}
         try:
+            form = UserValidator()
+            if not form.validate():
+                json["errors"] = form.errors
+                raise Exception("Check fields")
+            
             json["data"] = UserService().update(id, get_body(request))
         except Exception as e:
             # print(traceback.format_exc())

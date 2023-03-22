@@ -4,6 +4,8 @@ from pprint import pprint
 
 class BaseView(MethodView):
 
+    http_code = 200
+
     init_every_request = False
 
     def index(self):
