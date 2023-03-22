@@ -11,7 +11,3 @@ class ProfileValidator(FlaskForm):
     name = StringField('name', validators=[
         DataRequired()
     ])
-
-    email = StringField('email', validators=[
-        DataRequired()
-    ])
