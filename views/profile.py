@@ -2,7 +2,7 @@ from .base import BaseView
 from services.profile import ProfileService
 from pprint import pprint
 from flask import request
-from helpers import get_body
+from helpers.request import get_body
 import traceback
 
 class ProfileView(BaseView):

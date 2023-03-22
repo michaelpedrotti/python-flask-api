@@ -4,7 +4,8 @@ from .base import BaseService
 from . profile import ProfileService
 from models.user import UserModel
 from app import db
-from helpers import password_generator, model_fill
+from helpers.password import password_generator
+from helpers.model import model_fill
 from datetime import datetime
 from pprint import pprint
 

@@ -1,4 +1,4 @@
-from helpers import request_square_brackets
+from helpers.request import request_square_brackets
 from flask_sqlalchemy.model import Model
 from werkzeug.wrappers.request import ImmutableMultiDict
 from sqlalchemy.orm.attributes import InstrumentedAttribute

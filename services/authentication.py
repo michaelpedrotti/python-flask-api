@@ -1,7 +1,7 @@
 import jwt
 import os
 from models.user import UserModel
-from helpers import password_compare
+from helpers.password import password_compare
 
 
 class Authentication():

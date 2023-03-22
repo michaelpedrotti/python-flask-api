@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from helpers import resource
+from helpers.route import resource, route_get, route_post
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -11,7 +11,7 @@ def create_app():
     from views.user import UserView
     from views.profile import ProfileView
     from views.auth import AuthView
-    import views.public as public
+    from views.public import PublicView
 
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
@@ -23,11 +23,12 @@ def create_app():
     resource(app, 'user', UserView.as_view('user'))
     resource(app, 'profile', ProfileView.as_view('profile'))
 
-    app.add_url_rule('/auth/login', view_func=AuthView.login, methods=["POST"])
-    app.add_url_rule('/auth/me', view_func=AuthView.my_self, methods=["GET"])
-    app.add_url_rule('/auth/setting', view_func=AuthView.set_auth_setting, methods=["POST"])
-    app.add_url_rule('/auth/setting', view_func=AuthView.get_auth_setting, methods=["GET"])
-    
-    app.add_url_rule('/', view_func=public.index)
+    route_post(app, '/auth/login', AuthView.login)
+    route_get(app, '/auth/me', AuthView.my_self)
+
+    route_post(app, '/auth/setting', AuthView.set_auth_setting)
+    route_get(app, '/auth/setting', AuthView.get_auth_setting)
+
+    route_get(app, '/', PublicView.index)
 
     return app

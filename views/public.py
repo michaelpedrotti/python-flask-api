@@ -1,2 +1,4 @@
-def index():
-    return {"error": False, "message": "home"}
+class PublicView:
+
+    def index(self):
+        return {"error": False, "message": "home"}

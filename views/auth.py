@@ -1,7 +1,7 @@
 from decorators.authentication import is_authenticated
 from services.authentication import Authentication
 from services.user import UserService
-from helpers import password_generator
+from helpers.password import password_generator
 from flask import g, request
 # from pprint import pprint
 import traceback
