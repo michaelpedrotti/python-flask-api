@@ -1,5 +1,5 @@
 import jwt
-import os
+from os import getenv
 from models.user import UserModel
 from helpers.password import password_compare
 
@@ -22,14 +22,14 @@ class Authentication():
         
         return jwt.encode(
             {"id": user_id}, 
-            os.environ.get('JWT_SECRET', 'secret'), 
+            getenv('JWT_SECRET', 'secret'), 
             algorithm="HS256"
         )
 
     def verify(self, token = ''):
         return jwt.decode(
             token, 
-            os.environ.get('JWT_SECRET', 'secret'), 
+            getenv('JWT_SECRET', 'secret'), 
             algorithms=["HS256"]
         )
     

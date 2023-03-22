@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import random
 
+
 def password_generator(password: str = '') -> str:  
 
     if "".__eq__(password):

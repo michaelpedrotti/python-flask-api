@@ -1,12 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+from flask_migrate import Migrate
 from helpers.route import resource, route_get, route_post
 
 db = SQLAlchemy()
-ma = Marshmallow()
+migrate = Migrate()
 
 def create_app():
+    """ factory function  """
 
     from views.user import UserView
     from views.profile import ProfileView
@@ -14,10 +15,10 @@ def create_app():
     from views.public import PublicView
 
     app = Flask(__name__)
-    app.config.from_pyfile('settings.py')
+    app.config.from_object('settings')
  
     db.init_app(app)
-    ma.init_app(app)
+    migrate.init_app(app, db)
 
     # https://flask.palletsprojects.com/en/2.2.x/views/
     resource(app, 'user', UserView.as_view('user'))
