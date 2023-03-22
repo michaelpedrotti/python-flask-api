@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from helpers.route import resource, route_get, route_post
+from helpers.route import route_resource, route_get, route_post
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -21,8 +21,8 @@ def create_app():
     migrate.init_app(app, db)
 
     # https://flask.palletsprojects.com/en/2.2.x/views/
-    resource(app, 'user', UserView.as_view('user'))
-    resource(app, 'profile', ProfileView.as_view('profile'))
+    route_resource(app, 'user', UserView.as_view('user'))
+    route_resource(app, 'profile', ProfileView.as_view('profile'))
 
     route_post(app, '/auth/login', AuthView.login)
     route_get(app, '/auth/me', AuthView.my_self)

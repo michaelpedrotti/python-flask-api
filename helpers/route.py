@@ -2,7 +2,7 @@ from flask import Flask
 from flask.views import MethodView
 
 
-def resource(app: Flask, path: str, func: MethodView):
+def route_resource(app: Flask, path: str, func: MethodView):
     app.add_url_rule(f"/{path}/<int:id>", strict_slashes=False, view_func=func, methods=["GET", "PUT", "DELETE"])
     app.add_url_rule(f"/{path}/<int:id>/edit", strict_slashes=False, view_func=func, methods=["GET"])
     app.add_url_rule(f"/{path}/new", strict_slashes=False, view_func=func, methods=["GET"])

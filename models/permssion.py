@@ -11,7 +11,7 @@ class PermissionModel(db.Model):
     """
     id = Column(Integer, primary_key=True, autoincrement=True)
     profile_id = Column(Integer, nullable=False)
-    resource = Column(String, unique=True, nullable=False)
+    resource = Column(String(50), nullable=False)
     actions = Column(JSON)
     
 
