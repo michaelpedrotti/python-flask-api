@@ -30,7 +30,7 @@ class BaseView(MethodView):
         return {"error": False, "message": "detroy was not implemented"}
 
 
-    def get(self, id = None):
+    def get(self, id = None, **kwargs):
 
         path = request.url_rule.__str__()
 
@@ -45,11 +45,11 @@ class BaseView(MethodView):
             else:
                 return self.index()
 
-    def post(self):
+    def post(self, **kwargs):
         return self.store()
 
-    def put(self, id = 0):
+    def put(self, id = 0, **kwargs):
        return self.update(id)
 
-    def delete(self, id = 0):
+    def delete(self, id = 0, **kwargs):
         return self.detroy(id)

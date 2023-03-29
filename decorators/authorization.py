@@ -1,7 +1,8 @@
 from functools import wraps
-from flask import g, jsonify
+from flask import g, request, jsonify
 from services.authorization import AuthorizationService
 from pprint import pprint
+
 
 def is_authorized(wrapped):
     """
@@ -16,8 +17,11 @@ def is_authorized(wrapped):
 
             if user is None:
                 raise Exception('Not Autenticated')
-            
-            if AuthorizationService().has_permission('user', 'read', user.get('id')) is not True:
+
+            resource = request.view_args['resource']
+            action = request.view_args['action']
+                
+            if AuthorizationService().has_permission(resource, action, user.get('id')) is not True:
                 raise Exception('Forbidden')
             
             return wrapped(*args, **kwargs)

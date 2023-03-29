@@ -4,6 +4,7 @@ from dicts.permission import permission
 from sqlalchemy.orm.scoping import scoped_session
 from sqlalchemy.engine.cursor import CursorResult
 from sqlalchemy import text
+import sys
 
 
 class AuthorizationService():
@@ -20,6 +21,8 @@ class AuthorizationService():
             WHERE user.id = " + str(user_id) + " \
             AND permission.resource = '" + resource + "' \
             AND JSON_CONTAINS(permission.actions, json_quote('" + action + "')) > 0"
+        
+        print(query, file=sys.stderr)
         
         session: scoped_session = db.session
         result: CursorResult = session.execute(text(query))
