@@ -24,7 +24,17 @@ def route_resource(app: Flask, resource: str, func: MethodView):
         )
 
 def route_post(app: Flask, path: str, func):
-    app.add_url_rule(path, view_func=func, methods=["POST"])
+    
+    app.add_url_rule(path, 
+        strict_slashes=False, 
+        view_func=func, 
+        methods=["POST"]
+    )
 
 def route_get(app: Flask, path: str, func):
-    app.add_url_rule(path, view_func=func, methods=["GET"])
+
+    app.add_url_rule(path, 
+        strict_slashes=False, 
+        view_func=func, 
+        methods=["GET"]
+    )
